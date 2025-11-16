@@ -3,6 +3,9 @@ title: "PROJET_DATA_MINING_OURAGHENE_TIMOFTE_GUEMMAT"
 author: "Hana Ouraghene, Alexandra Béatrice Timofte, Manel Guemmat"
 date: "2025-10-23"
 output: pdf_document
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -12,11 +15,19 @@ library(tidyverse)
 
 # 1. Introduction (Responsable: Hana)
 
-Ce projet analyse les données nutritionnelles de produits de fast-food (Burger King, McDonald’s, Wendy’s). Nous limitons l’analyse aux produits de type “Sandwich” afin de comparer des éléments homogènes.
+Ce projet analyse les données nutritionnelles de produits de fast-food
+(Burger King, McDonald’s, Wendy’s). Nous limitons l’analyse aux produits
+de type “Sandwich” afin de comparer des éléments homogènes.
 
-Nous répondons aux questions suivantes : • Quel restaurant propose les sandwiches les plus caloriques / gras / salés ? • Quelles sont les dimensions nutritionnelles principales (ACP) ? • Peut-on identifier des profils de sandwiches (clustering) ? • Les restaurants se distinguent-ils réellement, et sur quels critères ?
+Nous répondons aux questions suivantes : • Quel restaurant propose les
+sandwiches les plus caloriques / gras / salés ? • Quelles sont les
+dimensions nutritionnelles principales (ACP) ? • Peut-on identifier des
+profils de sandwiches (clustering) ? • Les restaurants se
+distinguent-ils réellement, et sur quels critères ?
 
-Nous utilisons trois méthodes complémentaires : 1. Analyse descriptive 2. ACP (analyse en composantes principales) 3. Classification non supervisée
+Nous utilisons trois méthodes complémentaires : 1. Analyse descriptive
+2. ACP (analyse en composantes principales) 3. Classification non
+supervisée
 
 # 2. Préparation des données (Responsable : Hana)
 
@@ -29,30 +40,56 @@ burger <- read.csv("NutritionBurger.csv", header = TRUE, sep=";")
 # Sous-ensemble sandwich
 data <- burger %>% filter(Type == "Sandwich")
 ```
+
 2.2 Liste des variables quantitatives retenues
 
-Variables utilisées pour ACP et clustering :
-	•	Calories
-	•	TotalFat
-	•	SaturatedFat
-	•	Sodium
-	•	Sugar
-	•	Protein
-	
+Variables utilisées pour ACP et clustering : • Calories • TotalFat •
+SaturatedFat • Sodium • Sugar • Protein
+
 ```{r setup, include=FALSE}
 # valider les var
+names(burger)
+str(burger)
+
+summary(burger)
+
+View(burger)
+
+str(burger)
+
+burger$Restaurant=as.factor(burger$Restaurant)
+burger$Type=as.factor(burger$Type)
+burger$Item=as.factor(burger$Item)
+
+str(burger)
 ```
 
-# 3. Analyse descriptive  (Responsable : A – MAX 3 graphes)
+# 3. Analyse descriptive (Responsable : A – MAX 3 graphes)
 
 Objectif : décrire Calories, SaturatedFat et Sodium selon Restaurant.
 Chaque graphique doit être suivi d’une interprétation (5–6 lignes max).
 
-# 4. ACP – Analyse en composantes principales  (Responsable : B – MAX 2 graphes)
+```{r}
+p1 <- ggplot(data, aes(x = Restaurant, y = Calories, fill = Restaurant)) +
+geom_boxplot() +
+theme_minimal() +
+labs(
+title = "Répartition des calories selon le restaurant",
+x = "Restaurant",
+y = "Calories (kcal)"
+) +
+theme(legend.position = "none")
 
-Objectif : interpréter les axes principaux, lire les loadings, et visualiser les groupes.
+p1
+```
 
-# 5. Classification non supervisée  (Responsable : A – 1 graphe max)
+# 4. ACP – Analyse en composantes principales (Responsable : B – MAX 2 graphes)
+
+Objectif : interpréter les axes principaux, lire les loadings, et
+visualiser les groupes.
+
+# 5. Classification non supervisée (Responsable : A – 1 graphe max)
+
 Objectif : identifier des profils nutritionnels.
 
 # 6. Conclusion (Responsable : Hana)
