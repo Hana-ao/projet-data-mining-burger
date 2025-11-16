@@ -4,30 +4,55 @@ author: "Hana Ouraghene, Alexandra Béatrice Timofte, Manel Guemmat"
 date: "2025-10-23"
 output: pdf_document
 ---
-# 1. Introduction  (Responsable: Hana)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+library(tidyverse)
+```
+
+# 1. Introduction (Responsable: Hana)
+
+Ce projet analyse les données nutritionnelles de produits de fast-food (Burger King, McDonald’s, Wendy’s). Nous limitons l’analyse aux produits de type “Sandwich” afin de comparer des éléments homogènes.
+
+Nous répondons aux questions suivantes : • Quel restaurant propose les sandwiches les plus caloriques / gras / salés ? • Quelles sont les dimensions nutritionnelles principales (ACP) ? • Peut-on identifier des profils de sandwiches (clustering) ? • Les restaurants se distinguent-ils réellement, et sur quels critères ?
+
+Nous utilisons trois méthodes complémentaires : 1. Analyse descriptive 2. ACP (analyse en composantes principales) 3. Classification non supervisée
+
+# 2. Préparation des données (Responsable : Hana)
+
+## 2.1 Importation et sélection du sous-ensemble
 
 ```{r setup, include=FALSE}
 # Import
 burger <- read.csv("NutritionBurger.csv", header = TRUE, sep=";")
 
+# Sous-ensemble sandwich
+data <- burger %>% filter(Type == "Sandwich")
+```
+2.2 Liste des variables quantitatives retenues
+
+Variables utilisées pour ACP et clustering :
+	•	Calories
+	•	TotalFat
+	•	SaturatedFat
+	•	Sodium
+	•	Sugar
+	•	Protein
+	
+```{r setup, include=FALSE}
+# valider les var
 ```
 
-```{r cars}
-summary(burger)
-str(burger)
-burger$Restaurant=as.factor(burger$Restaurant)
-burger$Item=as.factor(burger$Item)
-burger$Type=as.factor(burger$Type)
-str(burger)
-```
+# 3. Analyse descriptive  (Responsable : A – MAX 3 graphes)
 
-# 2. Analyse descriptive  (Responsable: Camarade A)
+Objectif : décrire Calories, SaturatedFat et Sodium selon Restaurant.
+Chaque graphique doit être suivi d’une interprétation (5–6 lignes max).
 
-# 3. ACP  (Responsable: Camarade B)
+# 4. ACP – Analyse en composantes principales  (Responsable : B – MAX 2 graphes)
 
-# 4. Classification non supervisée  (Responsable: Hana ou A)
+Objectif : interpréter les axes principaux, lire les loadings, et visualiser les groupes.
 
-# 5. Conclusion  (à 3)
+# 5. Classification non supervisée  (Responsable : A – 1 graphe max)
+Objectif : identifier des profils nutritionnels.
 
-
-
+# 6. Conclusion (Responsable : Hana)
