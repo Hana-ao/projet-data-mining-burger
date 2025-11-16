@@ -113,6 +113,9 @@ vars_quanti <- data %>%
   select(Calories, TotalFat, SaturatedFat, Sodium, Sugar, Protein, Fiber)
 ```
 
+Les variables retenues couvrent les dimensions nutritionnelles principales telles que la densité énergétique (Calories, Lipides, Sodium) et la dimension glucidique ou fibreuse. L’ACP permettra de visualiser comment ces dimensions structurent la variabilité.
+
+
 ```{r}
 # BLOC à supprimer pour le rapport final
 names(burger)
