@@ -18,42 +18,71 @@ library(tidyverse)
 Ce projet analyse les données nutritionnelles de produits de fast-food
 (Burger King, McDonald’s, Wendy’s).
 
-L’analyse de ce type de données présente un intérêt concret pour la prise de décision du consommateur. Elle permet d’identifier vers quelles enseignes se tourner lorsqu’on souhaite “se faire plaisir” tout en limitant les excès, ainsi que de repérer, au
-sein d’une même enseigne, quels produits sont relativement “moins mauvais” que d’autres.
+L’analyse de ce type de données présente un intérêt concret pour la
+prise de décision du consommateur. Elle permet d’identifier vers quelles
+enseignes se tourner lorsqu’on souhaite “se faire plaisir” tout en
+limitant les excès, ainsi que de repérer, au sein d’une même enseigne,
+quels produits sont relativement “moins mauvais” que d’autres.
 
-Ce travail s’inscrit également dans une perspective de santé publique : comparer les apports nutritionnels réels (calories, graisses saturées, sodium, sucres, fibres, etc.) aux recommandations d’organismes comme l’OMS permet d’évaluer si certains sandwiches dépassent largement les seuils conseillés, et dans quelle mesure une consommation régulière peut contribuer à des déséquilibres.
+Ce travail s’inscrit également dans une perspective de santé publique :
+comparer les apports nutritionnels réels (calories, graisses saturées,
+sodium, sucres, fibres, etc.) aux recommandations d’organismes comme
+l’OMS permet d’évaluer si certains sandwiches dépassent largement les
+seuils conseillés, et dans quelle mesure une consommation régulière peut
+contribuer à des déséquilibres.
 
-Dans ce contexte, une approche statistique permet d’obtenir une lecture plus fiable et plus structurée de la qualité nutritionnelle des produits proposés.
+Dans ce contexte, une approche statistique permet d’obtenir une lecture
+plus fiable et plus structurée de la qualité nutritionnelle des produits
+proposés.
 
 Nous avons choisi de limiter l’analyse aux produits de type Sandwich,
 qui constituent à la fois la catégorie la plus représentée du dataset et
-l’élément le plus couramment consommé dans les menus de fast-food. 
+l’élément le plus couramment consommé dans les menus de fast-food.
 
-Ce choix répond également à une exigence de cohérence analytique : comparer des sandwiches à des desserts, des boissons ou des salades n’aurait pas de sens statistique, car leurs compositions nutritionnelles obéissent à des logiques très différentes (densité énergétique, sucres, fibres, portion).
+Ce choix répond également à une exigence de cohérence analytique :
+comparer des sandwiches à des desserts, des boissons ou des salades
+n’aurait pas de sens statistique, car leurs compositions nutritionnelles
+obéissent à des logiques très différentes (densité énergétique, sucres,
+fibres, portion).
 
 Dans le cadre de cette étude, nous nous concentrons sur cinq questions
 principales permettant d’articuler l’analyse descriptive, l’ACP et le
-clustering : 
+clustering :
 
-1. **Quelle enseigne propose les sandwiches les plus caloriques ?** Cette première question vise à comparer globalement les niveaux d’énergie proposés par les trois enseignes.
+1.  **Quelle enseigne propose les sandwiches les plus caloriques ?**
+    Cette première question vise à comparer globalement les niveaux
+    d’énergie proposés par les trois enseignes.
 
-2.  **Au sein d’une même enseigne, quels sont les sandwiches “les moins mauvais” d’un point de vue nutritionnel ?** 
-Cela permet d’identifier, pour chaque restaurant, les produits les plus modérés en termes de graisses, de calories ou de sodium.
+2.  **Au sein d’une même enseigne, quels sont les sandwiches “les moins
+    mauvais” d’un point de vue nutritionnel ?** Cela permet
+    d’identifier, pour chaque restaurant, les produits les plus modérés
+    en termes de graisses, de calories ou de sodium.
 
-3.  **Quels nutriments expliquent le plus la variabilité observée entre les sandwiches ?**
-Cette question, explorée via l’analyse en composantes principales (ACP), vise à déterminer les dimensions nutritionnelles dominantes (densité énergétique, dimension sucrée, etc.).
+3.  **Quels nutriments expliquent le plus la variabilité observée entre
+    les sandwiches ?** Cette question, explorée via l’analyse en
+    composantes principales (ACP), vise à déterminer les dimensions
+    nutritionnelles dominantes (densité énergétique, dimension sucrée,
+    etc.).
 
-4.  **Les enseignes présentent-elles une “signature nutritionnelle” identifiable ?** L’ACP et le clustering permettent d’évaluer si les sandwiches se regroupent naturellement par restaurant ou si les profils nutritionnels sont transversaux.
+4.  **Les enseignes présentent-elles une “signature nutritionnelle”
+    identifiable ?** L’ACP et le clustering permettent d’évaluer si les
+    sandwiches se regroupent naturellement par restaurant ou si les
+    profils nutritionnels sont transversaux.
 
-5.  **Quels profils nutritionnels distincts peut-on identifier parmi les sandwiches ?** 
-L’objectif est ici de mettre en évidence des groupes homogènes (ex. sandwiches très gras, sandwiches modérés, et.), afin de mieux comprendre la diversité de l’offre.
-
+5.  **Quels profils nutritionnels distincts peut-on identifier parmi les
+    sandwiches ?** L’objectif est ici de mettre en évidence des groupes
+    homogènes (ex. sandwiches très gras, sandwiches modérés, et.), afin
+    de mieux comprendre la diversité de l’offre.
 
 # 2. Préparation des données
 
 ## 2.1 Importation et sélection du sous-ensemble
 
-Les données ont été importées depuis le fichier d’origine et filtrées afin de ne conserver que les produits de type *Sandwich*. Ce sous-ensemble correspond aux choix méthodologiques présentés dans l’introduction et constitue la base de l’ensemble des analyses descriptives, multivariées et de classification.
+Les données ont été importées depuis le fichier d’origine et filtrées
+afin de ne conserver que les produits de type *Sandwich*. Ce
+sous-ensemble correspond aux choix méthodologiques présentés dans
+l’introduction et constitue la base de l’ensemble des analyses
+descriptives, multivariées et de classification.
 
 ```{r setup, include=FALSE}
 # Import
@@ -63,16 +92,21 @@ burger <- read.csv("NutritionBurger.csv", header = TRUE, sep=";")
 data <- burger %>% filter(Type == "Sandwich")
 ```
 
-2.2 Liste des variables quantitatives retenues
-Pour l’analyse multivariée (ACP) et la classification non supervisée, nous retenons sept variables nutritionnelles continues : Calories, TotalFat, SaturatedFat, Sodium, Sugar, Protein et Fiber.
+2.2 Liste des variables quantitatives retenues Pour l’analyse
+multivariée (ACP) et la classification non supervisée, nous retenons
+sept variables nutritionnelles continues : Calories, TotalFat,
+SaturatedFat, Sodium, Sugar, Protein et Fiber.
 
-Ce choix permet de couvrir l’ensemble des dimensions nutritionnelles pertinentes pour caractériser les sandwiches :
-	•	Calories : mesure globale de la densité énergétique ;
-	•	TotalFat / SaturatedFat : graisses totales et graisses “mauvaises”, déterminantes pour la santé cardiovasculaire ;
-	•	Sodium : élément clé pour évaluer le risque lié au sel (hypertension) ;
-	•	Sugar : contribution glucidique ;
-	•	Protein : indicateur de proportion de viande ;
-	•	Fiber : dimension protectrice importante selon les recommandations de l’OMS, essentielle pour identifier les sandwiches “les moins mauvais”.
+Ce choix permet de couvrir l’ensemble des dimensions nutritionnelles
+pertinentes pour caractériser les sandwiches : 
+
+• Calories : mesure globale de la densité énergétique ; 
+
+• TotalFat / SaturatedFat : graisses totales et graisses “mauvaises”, déterminantes pour la santé cardiovasculaire ; 
+• Sodium : élément clé pour évaluer le risque lié au sel (hypertension) ; 
+• Sugar : contribution glucidique ;
+• Protein : indicateur de proportion de viande ; 
+• Fiber : dimension protectrice importante selon les recommandations de l’OMS, essentielle pour identifier les sandwiches “les moins mauvais”.
 
 ```{r}
 vars_quanti <- data %>%
