@@ -98,34 +98,35 @@ sept variables nutritionnelles continues : Calories, TotalFat,
 SaturatedFat, Sodium, Sugar, Protein et Fiber.
 
 Ce choix permet de couvrir l’ensemble des dimensions nutritionnelles
-pertinentes pour caractériser les sandwiches : 
+pertinentes pour caractériser les sandwiches :
 
-• Calories : mesure globale de la densité énergétique ; 
+• Calories : mesure globale de la densité énergétique ;
 
-• TotalFat / SaturatedFat : graisses totales et graisses “mauvaises”, déterminantes pour la santé cardiovasculaire ; 
-• Sodium : élément clé pour évaluer le risque lié au sel (hypertension) ; 
-• Sugar : contribution glucidique ;
-• Protein : indicateur de proportion de viande ; 
-• Fiber : dimension protectrice importante selon les recommandations de l’OMS, essentielle pour identifier les sandwiches “les moins mauvais”.
+• TotalFat / SaturatedFat : graisses totales et graisses “mauvaises”,
+déterminantes pour la santé cardiovasculaire ; • Sodium : élément clé
+pour évaluer le risque lié au sel (hypertension) ; • Sugar :
+contribution glucidique ; • Protein : indicateur de proportion de viande
+; • Fiber : dimension protectrice importante selon les recommandations
+de l’OMS, essentielle pour identifier les sandwiches “les moins
+mauvais”.
 
 ```{r}
 vars_quanti <- data %>%
   select(Calories, TotalFat, SaturatedFat, Sodium, Sugar, Protein, Fiber)
 ```
 
-Les variables retenues couvrent les dimensions nutritionnelles principales telles que la densité énergétique (Calories, Lipides, Sodium) et la dimension glucidique ou fibreuse. L’ACP permettra de visualiser comment ces dimensions structurent la variabilité.
-
+Les variables retenues couvrent les dimensions nutritionnelles
+principales telles que la densité énergétique (Calories, Lipides,
+Sodium) et la dimension glucidique ou fibreuse. L’ACP permettra de
+visualiser comment ces dimensions structurent la variabilité.
 
 ```{r}
 # BLOC à supprimer pour le rapport final
 names(burger)
-str(burger)
 
 summary(burger)
 
 View(burger)
-
-str(burger)
 
 burger$Restaurant=as.factor(burger$Restaurant)
 burger$Type=as.factor(burger$Type)
@@ -134,10 +135,9 @@ burger$Item=as.factor(burger$Item)
 str(burger)
 ```
 
-# 3. Analyse descriptive (Responsable : A – MAX 3 graphes)
+# 3. Analyse descriptive
 
-Objectif : Chaque graphique doit être suivi d’une interprétation (5–6
-lignes max).
+## 3.1 Calories par restaurant
 
 ```{r}
 p1 <- ggplot(data, aes(x = Restaurant, y = Calories, fill = Restaurant)) +
@@ -153,13 +153,261 @@ theme(legend.position = "none")
 p1
 ```
 
+Le boxplot montre que Burger King propose les sandwiches les plus
+caloriques, avec une médiane élevée et une forte dispersion. McDonald’s
+présente au contraire les valeurs les plus faibles et les plus
+homogènes, indiquant une offre globalement moins calorique. Wendy’s se
+situe dans une position intermédiaire, avec une variabilité importante
+selon les produits. Globalement, Burger King apparaît comme l’enseigne
+la plus énergétique, tandis que McDonald’s est la plus modérée.
+
+D’un point de vue nutritionnel et au regard des objectifs définis dans
+l’introduction, cette première analyse permet déjà d’identifier des
+tendances structurantes :
+
+• McDonald’s apparaît comme l’enseigne la plus “prudente” sur le plan
+calorique ;
+
+• Burger King propose l’offre la plus dense énergétiquement ;
+
+• Wendy’s adopte un positionnement intermédiaire, mais parfois proche
+des extrêmes observés chez Burger King.
+
+Ces résultats constituent un premier élément de réponse à la question :
+“Quelle enseigne propose les sandwiches les plus caloriques ?”, et
+posent le cadre pour les analyses suivantes.
+
+## 3.2 Gras saturés par restaurant
+
+```{r}
+p2 <- ggplot(data, aes(x = Restaurant, y = SaturatedFat, fill = Restaurant)) +
+geom_boxplot() +
+theme_minimal() +
+labs(
+title = "Teneur en gras saturés selon le restaurant",
+x = "Restaurant",
+y = "Saturated Fat (g)"
+) +
+theme(legend.position = "none")
+
+p2
+```
+
+Le boxplot met en évidence que McDonald’s propose les sandwiches les
+moins riches en graisses saturées, avec une distribution compacte.
+Burger King présente des niveaux intermédiaires, plus variables. Wendy’s
+affiche les valeurs les plus élevées, indiquant une offre globalement
+plus grasse et plus susceptible de dépasser les seuils recommandés en
+acides gras saturés. Ces résultats confirment que, du point de vue du
+risque lipidique, McDonald’s apparaît comme l’enseigne la plus
+“modérée”, tandis que Wendy’s concentre les produits les plus
+susceptibles de dépasser les seuils recommandés par les autorités
+sanitaires.
+
+## 3.3 Sodium par restaurant
+
+```{r}
+p3 <- ggplot(data, aes(x = Restaurant, y = Sodium, fill = Restaurant)) +
+geom_boxplot() +
+theme_minimal() +
+labs(
+title = "Teneur en sodium selon le restaurant",
+x = "Restaurant",
+y = "Sodium (mg)"
+) +
+theme(legend.position = "none")
+
+p3
+```
+
+La répartition du sodium montre des différences marquées entre les
+enseignes. Les sandwiches Wendy’s apparaissent nettement plus salés,
+avec une médiane plus élevée et une dispersion importante, ce qui
+suggère des recettes globalement plus riches en sodium. Burger King
+présente des niveaux intermédiaires mais toujours supérieurs à ceux
+observés chez McDonald’s, dont la médiane est la plus faible et la
+variabilité plus contenue. Ces résultats confirment que Wendy’s est
+l’enseigne la plus “chargée” en sel, un élément critique au regard des
+recommandations de santé publique (risque cardiovasculaire). Cette
+analyse s’inscrit dans l’objectif du projet : identifier les enseignes
+dont les sandwiches exposent le plus le consommateur à un excès de
+sodium.
+
+## 3.4 Heatmap des corrélations
+
+```{r}
+# Sélection des colonnes numériques existantes
+num_data <- burger %>%
+  select(Calories, TotalFat, SaturatedFat, Cholesterol,
+         Sodium, TotalCarbs, Fiber, Sugar, Protein)
+
+# Matrice des corrélations
+corr_matrix <- round(cor(num_data, use = "pairwise.complete.obs"), 2)
+
+# Transformation en format long (équivalent à melt())
+melted_corr <- as.data.frame(corr_matrix) %>%
+  mutate(Var1 = rownames(.)) %>%
+  pivot_longer(
+    cols = -Var1,
+    names_to = "Var2",
+    values_to = "value"
+  )
+
+# Heatmap
+p_corr <- ggplot(melted_corr, aes(Var1, Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient2(low="blue", high="red", mid="white", midpoint=0) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) +
+  labs(title="Heatmap des corrélations nutritionnelles", x="", y="")
+
+p_corr
+```
+
+On observe immédiatement un bloc de corrélations positives très fortes
+(zones rouge vif) liant les Calories, le TotalFat, le SaturatedFat, le
+Cholesterol et le Sodium. Cette colinéarité indique un phénomène de «
+structure de taille » : plus un sandwich est calorique, plus il est
+mécaniquement gras, riche en acides gras saturés et chargé en sel. D'un
+point de vue santé publique, cela signifie qu'il est difficile pour le
+consommateur de dissocier l'apport énergétique de l'apport en graisses
+nocives ; les deux évoluent de concert. Il est également pertinent de
+noter la corrélation significative entre les Protéines et le Sodium.
+Cela suggère que l'augmentation de la portion protéique (viande,
+fromage) s'accompagne systématiquement d'une augmentation de la teneur
+en sel, probablement due aux méthodes de conservation et de préparation
+des ingrédients dans la restauration rapide. À l’inverse, les Fibres et
+les Sucres présentent des corrélations plus faibles, voire des zones
+plus pâles (proches de 0), avec le bloc lipidique. Les fibres, en
+particulier, semblent être une dimension plus indépendante. Cela
+confirme une hypothèse nutritionnelle clé : la densité calorique de ces
+produits n'est pas garante de leur qualité nutritionnelle (apports en
+fibres). Cette structure justifie pleinement le recours à une Analyse en
+Composantes Principales (ACP) pour la suite du projet. L'ACP permettra
+de résumer ce « bloc calorique » sur un premier axe factoriel
+prépondérant, tout en distinguant potentiellement les produits selon
+leur profil glucidique ou fibreux sur un second axe.
+
+## 3.5 Analyse fine du risque lipidique
+
+```{r}
+p_scatter <- ggplot(data, aes(x = TotalFat, y = SaturatedFat, color = Restaurant)) +
+  geom_point(alpha = 0.7, size = 2.5) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", size = 0.8) +
+  theme_minimal() +
+  labs(
+    title = "Relation structurelle entre Graisses Totales et Saturées",
+    subtitle = "Comparaison des profils lipidiques par enseigne",
+    x = "Total Fat (g)",
+    y = "Saturated Fat (g)",
+    caption = "Source: NutritionBurger.csv"
+  ) +
+  scale_color_brewer(palette = "Set1") +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    legend.position = "bottom"
+  )
+ 
+p_scatter
+```
+
+Ce graphique confirme une règle nutritionnelle absolue : l'augmentation
+du gras total entraîne mécaniquement l'explosion des graisses saturées
+(les plus nocives). Il n'existe aucune "recette miracle" dans ce jeu de
+données permettant de proposer un sandwich riche mais sain sur le plan
+lipidique.
+
+L'analyse distingue deux stratégies opposées : • La modération
+(McDonald's) : L'enseigne reste cantonnée dans une zone de sécurité
+relative. Ses produits, même les plus riches, restent en deçà des
+niveaux extrêmes observés ailleurs. • L'excès assumé (Burger King &
+Wendy's) : Ces deux chaînes dominent les zones à haut risque. Leurs gros
+sandwiches imposent mathématiquement au consommateur une double charge
+lipidique excessive.
+
 # 4. ACP – Analyse en composantes principales (Responsable : B – MAX 2 graphes)
 
 Objectif : interpréter les axes principaux, lire les loadings, et
 visualiser les groupes.
 
-# 5. Classification non supervisée (Responsable : A – 1 graphe max)
+# 5. Classification non supervisée (Clustering)
 
-Objectif : identifier des profils nutritionnels.
+Objectif : identifier des profils nutritionnels. Dépasser la simple
+étiquette "Enseigne" pour identifier s'il existe des catégories de
+sandwiches universelles (ex: "les légers", "les hyper-caloriques") qui
+traversent les marques.
+
+```{r}
+
+# Classification non supervisée (K-means)
+
+# 1. Préparation : Centrage-Réduction (indispensable car échelles différentes : kcal, g, mg)
+data_scaled <- scale(data %>% select(Calories, TotalFat, SaturatedFat, Sodium, Sugar, Protein, Fiber))
+
+# 2. Exécution du K-means (K=3 pour chercher 3 grands profils types)
+set.seed(123) # Pour la reproductibilité
+kmeans_res <- kmeans(data_scaled, centers = 3, nstart = 25)
+
+# 3. Ajout des résultats au dataset
+data$Cluster <- as.factor(kmeans_res$cluster)
+
+# 4. Visualisation : Projection des clusters sur les 2 premiers axes de l'ACP
+# (Permet de voir la séparation des groupes en 2D)
+pca_viz <- prcomp(data_scaled, scale. = FALSE)
+data_plot <- data.frame(pca_viz$x[,1:2], Cluster = data$Cluster, Restaurant = data$Restaurant)
+
+p_cluster <- ggplot(data_plot, aes(x = PC1, y = PC2, color = Cluster, shape = Restaurant)) +
+  geom_point(size = 3, alpha = 0.7) +
+  stat_ellipse(aes(fill = Cluster), geom = "polygon", alpha = 0.1) + # Ellipses de confiance
+  theme_minimal() +
+  scale_color_manual(values = c("#27AE60", "#F39C12", "#C0392B")) + # Vert, Orange, Rouge
+  scale_fill_manual(values = c("#27AE60", "#F39C12", "#C0392B")) +
+  labs(
+    title = "Typologie des sandwiches (K-means, K=3)",
+    subtitle = "Projection sur les axes principaux (ACP)",
+    x = "Axe 1 : Densité Énergétique (Gras/Calories)",
+    y = "Axe 2 : Structure Nutritionnelle (Protéines/Sodium)",
+    caption = "Cluster 1: Modérés | Cluster 2: Intermédiaires | Cluster 3: Extrêmes"
+  )
+
+p_cluster
+```
+
+La projection des individus sur le premier plan factoriel révèle une
+structuration très nette du marché en trois classes de produits qui
+s'étalent le long du premier axe (l'axe horizontal, qui porte plus de
+60% de l'information et représente la "Densité Énergétique").
+
+• Le Cluster 1 (Vert) – L'offre "Standard" : Situé à gauche du graphique
+(valeurs négatives sur l'axe 1), ce groupe rassemble les sandwiches les
+plus "légers". On observe une forte concentration de triangles
+(McDonald's) dans cette zone. Cela indique que l'offre "cœur de gamme"
+de McDonald's est structurellement moins chargée en graisses et calories
+que celle de ses concurrents. C'est la zone de "consommation courante".
+
+• Le Cluster 2 (Orange) – L'offre "Intermédiaire / Riche" : Ce groupe
+central, qui s'élève également sur l'axe 2 (axe vertical, souvent lié
+aux protéines et au sodium), capture les produits plus élaborés (type
+"Bacon", "Cheese" ou formats moyens). On y remarque un mélange
+hétérogène des trois formes géométriques (Ronds, Carrés, Triangles),
+prouvant qu'à ce niveau de gamme, les trois enseignes proposent des
+produits nutritionnellement équivalents.
+
+• Le Cluster 3 (Rouge) – L'offre "Extrême" (ou XXL) : Situé tout à
+droite du plan, ce cluster isole les "bombes caloriques". Ce sont les
+produits à très haute densité lipidique. Le constat visuel est frappant
+: ce groupe est majoritairement composé de ronds (Burger King) et de
+carrés (Wendy's), tandis que les triangles (McDonald's) y sont quasi
+absents.
+
+Conclusion opérationnelle : La classification prouve que la variabilité
+nutritionnelle n'est pas aléatoire. Il existe une "frontière"
+nutritionnelle nette vers l'extrême droite du graphique que McDonald's
+franchit rarement, contrairement à Burger King et Wendy's qui ont fait
+du "XXL" leur signature. Le clustering ne sépare donc pas les produits
+par recette (poulet vs bœuf), mais par format. Pour le consommateur,
+cela signifie que le risque sanitaire (bascule dans le cluster rouge)
+est quasi nul sur les petits formats, mais devient inévitable dès lors
+qu'on sélectionne les produits "Signature" chez BK ou Wendy's.
 
 # 6. Conclusion (Responsable : Hana)
