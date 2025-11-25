@@ -1,6 +1,6 @@
 ---
 title: "PROJET_DATA_MINING_OURAGHENE_TIMOFTE_GUEMMAT"
-author: "Hana Ouraghene, Alexandra Béatrice Timofte, Manel Guemmat"
+author: "Hana Ouraghene, Alexandra Béatrice Timofte, Manel GUEMMAt"
 date: "2025-10-23"
 output: pdf_document
 editor_options: 
@@ -327,8 +327,87 @@ lipidique excessive.
 
 # 4. ACP – Analyse en composantes principales (Responsable : B – MAX 2 graphes)
 
-Objectif : interpréter les axes principaux, lire les loadings, et
+Objectif : interpréter les axes principaux, lire les loadings et
 visualiser les groupes.
+```{r acp}
+
+library(FactoMineR)
+library(factoextra)
+library(tidyverse)
+
+acp_data <- data %>%
+  select(Calories, TotalFat, SaturatedFat, Sodium, Sugar, Protein, Fiber)
+
+rownames(acp_data) <- data$Item
+
+res_acp <- PCA(acp_data, scale.unit = TRUE, graph = FALSE)
+
+fviz_eig(res_acp, addlabels = TRUE)
+
+fviz_pca_var(res_acp,
+             col.var = "contrib",
+             gradient.cols = c("blue", "orange", "red"),
+             repel = TRUE)
+
+fviz_pca_ind(res_acp,
+             geom = "text",
+             repel = TRUE,
+             col.ind = data$Restaurant,
+             palette = c("#D35400", "#2980B9", "#27AE60"),
+             labelsize = 3
+) +
+  labs(color = "Enseigne")
+
+
+
+
+```
+
+Le scree plot montre une forte décroissance après le premier axe (70 %) puis un second axe important (16 %), les axes suivants contribuent très peu (< 6 %).
+Au total, les deux premiers axes expliquent 86 % de la variance ce qui est largement suffisant pour représenter la structure nutritionnelle des sandwiches. On retient donc les axes 1 et 2.
+
+Analyse du Cercle des Corrélations (Dim1–Dim2):
+Dim1 est fortement corrélé positivement à : les calories, les graisses totales (TotalFat), les graisses saturées (SaturatedFat),les protéines, Sodium. Ces variables pointent toutes dans la même direction et traduisent un profil de sandwich massif et riche.
+Cet axe peut être interprété comme un axe de densité énergétique et de charge nutritionnelle des sandwiches: plus un sandwich est gras, salé et calorique, plus il se situe à droite du plan et plus il prend des valeurs élevées sur Dim1.
+Dim2 est principalement déterminé par Fiber (flèche la plus verticale, orthogonale au bloc énergétique de Dim1). Les sandwiches situés donc en haut du plan sont plus riches en fibres.
+Sugar n'est opposé à Fiber (angle faible), mais sa contribution à cet axe reste marginale.
+Alors: Cet axe2 traduit une dimension plus qualitative du sandwich liée aux apports en fibres, indépendante de la densité énergétique portée par l’axe 1.
+
+
+Analyse du Graphe des Individus:
+Le plan factoriel révèle trois grandes zones nutritionnelles :
+1.Zone à gauche du plan (Dim1 négatif): Faible densité énergétique, moins de calories, moins de graisses, portions plus petites.
+Exemples :Hamburger, Cheeseburger, McChicken, Crispy Chicken Sandwich, Southern Style Crispy Chicken Sandwich..
+Enseignes représentées : Beaucoup de McDonald’s (bleu), quelques Burger King/Wendy’s mais rares. 
+C’est la zone des sandwiches “light” du fast-food.
+2.Zone centrale 
+Caractéristiques : Densité énergétique moyenne, compositions standard.
+Exemples :Big Mac, Whopper, Quarter Pounder with Cheese, Quarter Pounder with Cheese, Whopper, Daves Hot N Juicy Single, Asiago Ranch Chicken Club...
+Enseignes représentées : Mélange équilibré : Wendy’s, McDonald’s, Burger King.
+Ces sandwiches représentent les produits standards du marché.
+3. Zone À droite du plan (Dim1 positif) 
+Caractéristiques : Très forte densité énergétique : beaucoup de calories, lipides saturés, sodium.
+Exemples :Triple Whopper, Double Whopper, BK Triple Stackers, Baconator, Son of Baconator, Daves Hot..
+Enseignes représentées : Burger King (orange) massivement présent (signature XXL). Wendy’s (vert) également présent avec les sandwiches les plus riches. McDonald’s est quasiment absent de cette zone.
+Il s’agit des “bombes caloriques”, typiques des formats Premium/XL.
+
+Dim2 ne sépare pas les enseignes mais discrimine les sandwiches selon leurs caractéristiques secondaires.
+En haut du plan (Dim2 positif): Sandwiches plus riches en fibres (pain, crudités…).
+Exemples : Home Style Chicken Fillet, Country Pork Sandwich, Premium Crispy Chicken Club
+Enseignes représentées : Plusieurs produits Wendy’s et Burger King et quelques McDonald’s (notamment les recettes au poulet).
+Ce sont des sandwiches aux pains complets parfois plus équilibrés.
+En bas du plan (Dim2 négatif): Sandwiches très riches mais pauvres en fibres.
+Exemples :BK Double Stacker, BK Triple Stackers, Double Whopper
+Enseignes représentées : Majoritairement Burger King (stackers, doubles, triples), quelques Wendy’s très riches.
+Ce sont les sandwiches les plus lourds et les moins équilibrés.
+
+On remarque donc que les sandwiches se regroupent pas selon le type de viande car Poulet / bœuf / porc apparaissent partout dans les zones. Ce qui structure vraiment l’espace nutritionnel c’est le format et la taille (simple, double, triple, stacker…)
+
+ACP révèle trois grands profils nutritionnels :
+Les sandwiches légers : dominés par McDonald’s.
+Les sandwiches standards : mélange équilibré des 3 enseignes.
+Les sandwiches XXL : dominés par Burger King et Wendy’s.
+On peut dire qu'il existe des signatures nutritionnelles propres à chaque enseigne : McDonald’s se positionne comme la chaîne la plus light, Wendy’s la plus chargée et Burger King la plus hétérogène mais surtout XXL.
 
 # 5. Classification non supervisée (Clustering)
 
@@ -410,4 +489,4 @@ cela signifie que le risque sanitaire (bascule dans le cluster rouge)
 est quasi nul sur les petits formats, mais devient inévitable dès lors
 qu'on sélectionne les produits "Signature" chez BK ou Wendy's.
 
-# 6. Conclusion (Responsable : Hana)
+# 6. Conclusion 
