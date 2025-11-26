@@ -426,39 +426,37 @@ sandwiches universelles (ex: "les légers", "les hyper-caloriques") qui
 traversent les marques.
 
 ```{r}
+library(FactoMineR)
+library(factoextra)
+library(tidyverse)
 
-# Classification non supervisée (K-means)
+# 1. Données centrées-réduites (comme dans l’ACP)
+data_scaled <- scale(acp_data)
 
-# 1. Préparation : Centrage-Réduction (indispensable car échelles différentes : kcal, g, mg)
-data_scaled <- scale(data %>% select(Calories, TotalFat, SaturatedFat, Sodium, Sugar, Protein, Fiber))
-
-# 2. Exécution du K-means (K=3 pour chercher 3 grands profils types)
-set.seed(123) # Pour la reproductibilité
+# 2. K-means sur les données réduites
+set.seed(123)
 kmeans_res <- kmeans(data_scaled, centers = 3, nstart = 25)
 
-# 3. Ajout des résultats au dataset
+# 3. Ajout du cluster aux données
 data$Cluster <- as.factor(kmeans_res$cluster)
 
-# 4. Visualisation : Projection des clusters sur les 2 premiers axes de l'ACP
-# (Permet de voir la séparation des groupes en 2D)
-pca_viz <- prcomp(data_scaled, scale. = FALSE)
-data_plot <- data.frame(pca_viz$x[,1:2], Cluster = data$Cluster, Restaurant = data$Restaurant)
+# 4. Visualisation 
+p <- fviz_pca_biplot(
+  res_acp,
+  habillage = data$Cluster,                     # couleur = cluster
+  palette = c("#27AE60", "#F39C12", "#C0392B"), # vert / orange / rouge
+  addEllipses = TRUE,                           # ellipses à 95%
+  ellipse.level = 0.95,
+  repel = TRUE                                  
+)
 
-p_cluster <- ggplot(data_plot, aes(x = PC1, y = PC2, color = Cluster, shape = Restaurant)) +
-  geom_point(size = 3, alpha = 0.7) +
-  stat_ellipse(aes(fill = Cluster), geom = "polygon", alpha = 0.1) + # Ellipses de confiance
-  theme_minimal() +
-  scale_color_manual(values = c("#27AE60", "#F39C12", "#C0392B")) + # Vert, Orange, Rouge
-  scale_fill_manual(values = c("#27AE60", "#F39C12", "#C0392B")) +
-  labs(
-    title = "Typologie des sandwiches (K-means, K=3)",
-    subtitle = "Projection sur les axes principaux (ACP)",
-    x = "Axe 1 : Densité Énergétique (Gras/Calories)",
-    y = "Axe 2 : Structure Nutritionnelle (Protéines/Sodium)",
-    caption = "Cluster 1: Modérés | Cluster 2: Intermédiaires | Cluster 3: Extrêmes"
-  )
+# ➕ Ajout des noms des sandwiches
+p + geom_text(aes(label = data$Item),
+              color = "black",
+              size = 3,
+              vjust = -0.5)
 
-p_cluster
+
 ```
 
 La projection des individus sur le premier plan factoriel révèle une
