@@ -139,12 +139,13 @@ p1
 ```
 
 Le boxplot montre que Burger King propose les sandwiches les plus
-caloriques, avec une médiane élevée et une forte dispersion. McDonald’s
-présente au contraire les valeurs les plus faibles et les plus
-homogènes, indiquant une offre globalement moins calorique. Wendy’s se
-situe dans une position intermédiaire, avec une variabilité importante
-selon les produits. Globalement, Burger King apparaît comme l’enseigne
-la plus énergétique, tandis que McDonald’s est la plus modérée.
+caloriques, avec une médiane élevée et une forte dispersion.
+
+McDonald’s présente au contraire les valeurs les plus faibles et les
+plus homogènes, indiquant une offre globalement moins calorique.
+
+Wendy’s se situe dans une position intermédiaire, avec une variabilité
+importante selon les produits.
 
 D’un point de vue nutritionnel et au regard des objectifs définis dans
 l’introduction, cette première analyse permet déjà d’identifier des
@@ -153,7 +154,7 @@ tendances structurantes :
 • McDonald’s apparaît comme l’enseigne la plus “prudente” sur le plan
 calorique ;
 
-• Burger King propose l’offre la plus dense énergétiquement ;
+• Burger King propose l’offre la plus calorique ;
 
 • Wendy’s adopte un positionnement intermédiaire, mais parfois proche
 des extrêmes observés chez Burger King.
@@ -183,11 +184,12 @@ moins riches en graisses saturées, avec une distribution compacte.
 Burger King présente des niveaux intermédiaires, plus variables. Wendy’s
 affiche les valeurs les plus élevées, indiquant une offre globalement
 plus grasse et plus susceptible de dépasser les seuils recommandés en
-acides gras saturés. Ces résultats confirment que, du point de vue du
-risque lipidique, McDonald’s apparaît comme l’enseigne la plus
-“modérée”, tandis que Wendy’s concentre les produits les plus
-susceptibles de dépasser les seuils recommandés par les autorités
-sanitaires.
+acides gras saturés.
+
+Ces résultats confirment que, du point de vue du risque lipidique,
+McDonald’s apparaît comme l’enseigne la plus “modérée”, tandis que
+Wendy’s concentre les produits les plus susceptibles de dépasser les
+seuils recommandés par les autorités sanitaires en grasses saturés.
 
 ## 3.3 Sodium par restaurant
 
@@ -211,12 +213,13 @@ avec une médiane plus élevée et une dispersion importante, ce qui
 suggère des recettes globalement plus riches en sodium. Burger King
 présente des niveaux intermédiaires mais toujours supérieurs à ceux
 observés chez McDonald’s, dont la médiane est la plus faible et la
-variabilité plus contenue. Ces résultats confirment que Wendy’s est
-l’enseigne la plus “chargée” en sel, un élément critique au regard des
-recommandations de santé publique (risque cardiovasculaire). Cette
-analyse s’inscrit dans l’objectif du projet : identifier les enseignes
-dont les sandwiches exposent le plus le consommateur à un excès de
-sodium.
+variabilité plus contenue.
+
+Ces résultats confirment que Wendy’s est l’enseigne la plus “chargée” en
+sel, un élément critique au regard des recommandations de santé publique
+(risque cardiovasculaire). Cette analyse s’inscrit dans l’objectif du
+projet : identifier les enseignes dont les sandwiches exposent le plus
+le consommateur à un excès de sodium.
 
 ## 3.4 Heatmap des corrélations
 
@@ -256,22 +259,24 @@ structure de taille » : plus un sandwich est calorique, plus il est
 mécaniquement gras, riche en acides gras saturés et chargé en sel. D'un
 point de vue santé publique, cela signifie qu'il est difficile pour le
 consommateur de dissocier l'apport énergétique de l'apport en graisses
-nocives ; les deux évoluent de concert. Il est également pertinent de
-noter la corrélation significative entre les Protéines et le Sodium.
-Cela suggère que l'augmentation de la portion protéique (viande,
-fromage) s'accompagne systématiquement d'une augmentation de la teneur
-en sel, probablement due aux méthodes de conservation et de préparation
-des ingrédients dans la restauration rapide. À l’inverse, les Fibres et
-les Sucres présentent des corrélations plus faibles, voire des zones
-plus pâles (proches de 0), avec le bloc lipidique. Les fibres, en
-particulier, semblent être une dimension plus indépendante. Cela
-confirme une hypothèse nutritionnelle clé : la densité calorique de ces
-produits n'est pas garante de leur qualité nutritionnelle (apports en
-fibres). Cette structure justifie pleinement le recours à une Analyse en
-Composantes Principales (ACP) pour la suite du projet. L'ACP permettra
-de résumer ce « bloc calorique » sur un premier axe factoriel
-prépondérant, tout en distinguant potentiellement les produits selon
-leur profil glucidique ou fibreux sur un second axe.
+nocives ; les deux évoluent de concert.
+
+Il est également pertinent de noter la corrélation significative entre
+les Protéines et le Sodium. Cela suggère que l'augmentation de la
+portion protéique (viande, fromage) s'accompagne systématiquement d'une
+augmentation de la teneur en sel, probablement due aux méthodes de
+conservation et de préparation des ingrédients dans la restauration
+rapide.
+
+À l’inverse, les Fibres et les Sucres présentent des corrélations plus
+faibles, voire des zones plus pâles (proches de 0), avec le bloc
+lipidique. Les fibres, en particulier, semblent être une dimension plus
+indépendante.
+
+Cela confirme une hypothèse nutritionnelle clé : la densité calorique de
+ces produits n'est pas garante de leur qualité nutritionnelle (apports
+en fibres). Cette structure justifie pleinement le recours à une Analyse
+en Composantes Principales (ACP) pour la suite du projet.
 
 ## 3.5 Analyse fine du risque lipidique
 
@@ -302,18 +307,17 @@ du gras total entraîne mécaniquement l'explosion des graisses saturées
 données permettant de proposer un sandwich riche mais sain sur le plan
 lipidique.
 
-L'analyse distingue deux stratégies opposées : • La modération
-(McDonald's) : L'enseigne reste cantonnée dans une zone de sécurité
-relative. Ses produits, même les plus riches, restent en deçà des
-niveaux extrêmes observés ailleurs. • L'excès assumé (Burger King &
-Wendy's) : Ces deux chaînes dominent les zones à haut risque. Leurs gros
-sandwiches imposent mathématiquement au consommateur une double charge
-lipidique excessive.
+L'analyse distingue deux stratégies opposées :
 
-# 4. ACP – Analyse en composantes principales (Responsable : B – MAX 2 graphes)
+• La modération (McDonald's) : L'enseigne reste dans une zone de
+sécurité relative. Ses produits, même les plus riches, restent en dessou
+des niveaux extrêmes observés ailleurs.
 
-Objectif : interpréter les axes principaux, lire les loadings et
-visualiser les groupes.
+• L'excès assumé (Burger King & Wendy's) : Ces deux chaînes dominent les
+zones à haut risque. Leurs gros sandwiches imposent mathématiquement au
+consommateur une double charge lipidique excessive.
+
+# 4. ACP – Analyse en composantes principales 
 
 ```{r acp}
 
@@ -420,11 +424,6 @@ XXL.
 
 # 5. Classification non supervisée (Clustering)
 
-Objectif : identifier des profils nutritionnels. Dépasser la simple
-étiquette "Enseigne" pour identifier s'il existe des catégories de
-sandwiches universelles (ex: "les légers", "les hyper-caloriques") qui
-traversent les marques.
-
 ```{r}
 library(FactoMineR)
 library(factoextra)
@@ -459,41 +458,20 @@ p + geom_text(aes(label = data$Item),
 
 ```
 
-La projection des individus sur le premier plan factoriel révèle une
-structuration très nette du marché en trois classes de produits qui
-s'étalent le long du premier axe (l'axe horizontal, qui porte plus de
-60% de l'information et représente la "Densité Énergétique").
+L'application de l'algorithme K-means a permis de valider et de
+formaliser la structure de la variabilité observée par l'ACP, qui
+distingue clairement une dimension de **Charge Nutritionnelle (Dim1 :
+70.2%)** et une dimension de **Qualité/Fibres (Dim2 : 15.8%)**.
 
-• Le Cluster 1 (Vert) – L'offre "Standard" : Situé à gauche du graphique
-(valeurs négatives sur l'axe 1), ce groupe rassemble les sandwiches les
-plus "légers". On observe une forte concentration de triangles
-(McDonald's) dans cette zone. Cela indique que l'offre "cœur de gamme"
-de McDonald's est structurellement moins chargée en graisses et calories
-que celle de ses concurrents. C'est la zone de "consommation courante".
+La classification en **trois clusters distincts** cristallise les
+stratégies nutritionnelles des enseignes. L'analyse du biplot (Cluster
+vs. Axes Principaux) révèle les profils suivants :
 
-• Le Cluster 2 (Orange) – L'offre "Intermédiaire / Riche" : Ce groupe
-central, qui s'élève également sur l'axe 2 (axe vertical, souvent lié
-aux protéines et au sodium), capture les produits plus élaborés (type
-"Bacon", "Cheese" ou formats moyens). On y remarque un mélange
-hétérogène des trois formes géométriques (Ronds, Carrés, Triangles),
-prouvant qu'à ce niveau de gamme, les trois enseignes proposent des
-produits nutritionnellement équivalents.
-
-• Le Cluster 3 (Rouge) – L'offre "Extrême" (ou XXL) : Situé tout à
-droite du plan, ce cluster isole les "bombes caloriques". Ce sont les
-produits à très haute densité lipidique. Le constat visuel est frappant
-: ce groupe est majoritairement composé de ronds (Burger King) et de
-carrés (Wendy's), tandis que les triangles (McDonald's) y sont quasi
-absents.
-
-Conclusion opérationnelle : La classification prouve que la variabilité
-nutritionnelle n'est pas aléatoire. Il existe une "frontière"
-nutritionnelle nette vers l'extrême droite du graphique que McDonald's
-franchit rarement, contrairement à Burger King et Wendy's qui ont fait
-du "XXL" leur signature. Le clustering ne sépare donc pas les produits
-par recette (poulet vs bœuf), mais par format. Pour le consommateur,
-cela signifie que le risque sanitaire (bascule dans le cluster rouge)
-est quasi nul sur les petits formats, mais devient inévitable dès lors
-qu'on sélectionne les produits "Signature" chez BK ou Wendy's.
+|  |  |  |
+|----|----|----|
+| **Profil Clustered** | **Caractérisation Statistique (Position ACP)** | **Signature Nutritionnelle et Enseignes Clés** |
+| **(coleur verte) Cluster 1 : Les Modérés** | Faible projection sur Dim1 (Charge faible), Dim2 neutre. | Ces produits constituent la **zone de sécurité relative** du fast-food. Ils sont les moins caloriques, gras et salés (ex. : Cheeseburger, McChicken, Whopper Jr.). Ce profil est dominé par l'offre de **McDonald's**, qui se positionne résolument sur la modération des portions. |
+| **(couleur orange) Cluster 2 : Les Poids Lourds (XXL)** | Très forte projection positive sur Dim1 (Charge très élevée), Dim2 faible. | Ce cluster concentre les **« bombes caloriques »** du dataset. Leur format massif (Triple, Double Stacker, Baconator) entraîne une explosion des graisses saturées, du sodium et des protéines. Ce profil incarne la **stratégie XXL** des enseignes **Burger King** et **Wendy's**, absentes de la zone de modération. |
+| **(couleur rouge) Cluster 3 : Les Standards Améliorés** | Projection Dim1 moyenne à faible, forte projection positive sur Dim2 (Fibres). | Regroupe les sandwiches dont la densité énergétique reste raisonnable, mais qui se distinguent par une **teneur en fibres supérieure** (ex. : Home Style Chicken Fillet, Country Pork Sandwich). Ils offrent un léger bénéfice qualitatif (Fibres) sans basculer dans l'excès de charge. Ce cluster est plus hétérogène, mêlant des produits des trois enseignes. |
 
 # 6. Conclusion
